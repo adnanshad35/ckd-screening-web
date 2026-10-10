@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CKD Screening — Try the model</title>
+  <meta name="description" content="Enter patient values and see what the thesis CatBoost model predicts. Research demonstration only.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">CKD Screening</a>
+    <nav aria-label="Main">
+      <a href="index.html">About CKD</a>
+      <a href="research.html">Research</a>
+      <a href="predict.html" aria-current="page">Try the model</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="hero" style="padding-bottom:16px">
+    <h1>Try the screening model</h1>
+    <p class="lead">Fill in your basic information and lab data, press Submit, and the thesis CatBoost model produces a report you can download. The model runs in your browser; nothing you type is sent anywhere.</p>
+    <p class="notice"><strong>Research demonstration, not a diagnosis.</strong> <span id="caveat"></span> Do not use the result to make health decisions. See a doctor for kidney testing.</p>
+  </div>
+
+  <div class="controls no-print">
+    <label for="example-select">Or load an example:</label>
+    <select id="example-select"><option value="">Choose an example…</option></select>
+    <button type="button" class="btn ghost sm" id="clear">Clear</button>
+  </div>
+
+  <form id="form" class="predict-form no-print" novalidate>
+    <div class="submit-row" id="submit-row">
+      <button type="submit" class="btn">Submit and see report</button>
+      <span class="small" id="status" aria-live="polite"></span>
+    </div>
+  </form>
+
+  <section class="card report" id="report" hidden aria-live="polite">
+    <div id="report-body"></div>
+    <div class="btn-row no-print" style="margin-top:20px">
+      <button type="button" class="btn" id="download">Download report</button>
+      <button type="button" class="btn ghost" id="print">Print or save as PDF</button>
+      <button type="button" class="btn ghost" id="edit">Edit answers</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Research prototype, not a diagnostic tool · <a href="research.html">How the model was built and tested</a></div>
+</footer>
+
+<script src="data/results.js"></script>
+<script src="data/model.js"></script>
+<script src="assets/features.js"></script>
+<script src="assets/examples.js"></script>
+<script src="assets/predict-core.js"></script>
+<script src="assets/predict.js"></script>
+</body>
+</html>

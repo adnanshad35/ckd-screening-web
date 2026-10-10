@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CKD Screening — Understanding Chronic Kidney Disease</title>
+  <meta name="description" content="Plain-language information about chronic kidney disease and an undergraduate thesis project on machine-learning screening.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">CKD Screening</a>
+    <nav aria-label="Main">
+      <a href="index.html" aria-current="page">About CKD</a>
+      <a href="research.html">Research</a>
+      <a href="predict.html">Try the model</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <h1>Chronic kidney disease, explained</h1>
+    <p class="lead">Chronic kidney disease (CKD) usually develops silently over years. This site explains what it is, who is at risk and how it is found, and presents an undergraduate thesis that tested whether machine learning can help screen for it.</p>
+    <div class="btn-row">
+      <a class="btn" href="research.html">See the research</a>
+      <a class="btn ghost" href="predict.html">Try the screening model</a>
+    </div>
+  </div>
+
+  <section class="wrap">
+    <h2>What is CKD?</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>What the kidneys do</h3>
+        <p>Your two kidneys filter waste and extra fluid out of the blood and pass them out as urine. They also help control blood pressure, keep minerals such as sodium and potassium in balance, and support the production of red blood cells.</p>
+      </div>
+      <div class="card">
+        <h3>What goes wrong</h3>
+        <p>In CKD the kidneys are damaged and gradually lose their ability to filter. It is called chronic when the damage or reduced function lasts three months or longer. Roughly one in ten adults worldwide is estimated to have some degree of CKD, and most do not know it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>Who is at higher risk?</h2>
+    <div class="grid cols-3">
+      <div class="card"><h3>Diabetes</h3><p>High blood sugar damages the kidney's small filters over time. Diabetes is the leading cause of CKD.</p></div>
+      <div class="card"><h3>High blood pressure</h3><p>Raised pressure strains the kidney's blood vessels. It is both a cause and a result of kidney damage.</p></div>
+      <div class="card"><h3>Family history</h3><p>Having a close relative with kidney disease raises your own risk.</p></div>
+      <div class="card"><h3>Older age</h3><p>Kidney function declines naturally with age, so risk rises after about 60.</p></div>
+      <div class="card"><h3>Smoking and obesity</h3><p>Both harm blood vessels and make diabetes and high blood pressure more likely.</p></div>
+      <div class="card"><h3>Frequent painkillers</h3><p>Long-term, heavy use of NSAID painkillers such as ibuprofen can injure the kidneys.</p></div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>Symptoms</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Early stages</h3>
+        <p>Usually there are none. Most people feel well until a large part of kidney function has been lost, which is why testing people at risk matters.</p>
+      </div>
+      <div class="card">
+        <h3>Later stages</h3>
+        <ul>
+          <li>Tiredness and poor concentration</li>
+          <li>Swollen ankles, feet or hands</li>
+          <li>Itchy skin and muscle cramps</li>
+          <li>Nausea and loss of appetite</li>
+          <li>Changes in how often you pass urine, or foamy urine</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>How CKD is found</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Two simple tests</h3>
+        <ul>
+          <li><strong>Blood test (eGFR).</strong> Serum creatinine is measured and used to estimate the glomerular filtration rate: how much blood the kidneys filter each minute.</li>
+          <li><strong>Urine test (ACR).</strong> The albumin-to-creatinine ratio shows whether protein is leaking into the urine, an early sign of damage.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Stages by filtration rate</h3>
+        <div class="table-scroll">
+          <table>
+            <tr><th>Stage</th><th>eGFR (mL/min/1.73 m²)</th><th>Kidney function</th></tr>
+            <tr><td>G1</td><td>90 or more</td><td>Normal</td></tr>
+            <tr><td>G2</td><td>60–89</td><td>Mildly reduced</td></tr>
+            <tr><td>G3a</td><td>45–59</td><td>Mild to moderate</td></tr>
+            <tr><td>G3b</td><td>30–44</td><td>Moderate to severe</td></tr>
+            <tr><td>G4</td><td>15–29</td><td>Severely reduced</td></tr>
+            <tr><td>G5</td><td>Below 15</td><td>Kidney failure</td></tr>
+          </table>
+        </div>
+        <p class="small" style="margin:10px 0 0">Stages G1 and G2 count as CKD only when there are other signs of kidney damage, such as protein in the urine. Staging follows the KDIGO guideline.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>Protecting your kidneys</h2>
+    <div class="card">
+      <ul>
+        <li>Keep blood pressure and blood sugar within the targets your doctor sets.</li>
+        <li>Eat less salt, stay active and keep a healthy weight.</li>
+        <li>Do not smoke.</li>
+        <li>Use painkillers such as ibuprofen only as directed.</li>
+        <li>If you have diabetes, high blood pressure or a family history of kidney disease, ask for a kidney check (blood and urine test) once a year.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>About this project</h2>
+    <div class="card">
+      <p>This website accompanies the undergraduate thesis <em>Engineered CatBoost for Imbalanced Chronic Kidney Disease Screening</em>. The study trained five machine-learning models on 1,659 patient records and tuned the best one to miss as few CKD cases as possible.</p>
+      <div class="btn-row">
+        <a class="btn sm" href="research.html">Dataset, method and results</a>
+        <a class="btn ghost sm" href="predict.html">Interactive model</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <p class="notice"><strong>This site is for education and research.</strong> It does not give medical advice and cannot diagnose kidney disease. If you are worried about your kidneys, speak to a doctor.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">Undergraduate thesis project by Abu Adnan Shad and team · <a href="https://github.com/adnanshad35/ckd-catboost-screening">Source code on GitHub</a></div>
+</footer>
+</body>
+</html>

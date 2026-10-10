@@ -1,0 +1,5 @@
+.venv/
+__pycache__/
+build/parity.json
+catboost_info/
+build/eval_cache.json

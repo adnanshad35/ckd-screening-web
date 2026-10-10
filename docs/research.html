@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CKD Screening — Research</title>
+  <meta name="description" content="Dataset, method and results of an engineered CatBoost pipeline for imbalanced chronic kidney disease screening.">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">CKD Screening</a>
+    <nav aria-label="Main">
+      <a href="index.html">About CKD</a>
+      <a href="research.html" aria-current="page">Research</a>
+      <a href="predict.html">Try the model</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <p class="small">Undergraduate thesis</p>
+    <h1>Engineered CatBoost for imbalanced chronic kidney disease screening</h1>
+    <p class="lead">A CatBoost pipeline, tuned to keep sensitivity high on a heavily imbalanced dataset, compared against Logistic Regression, Random Forest, XGBoost and SVM under one train, validation and test framework.</p>
+    <div class="grid cols-4" id="headline-tiles"></div>
+  </div>
+
+  <section class="wrap" id="objective">
+    <h2>Research objective</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>Class imbalance</h3>
+        <p>About 92% of the records are CKD cases. A model can score high accuracy by labelling everyone as CKD, so accuracy alone says little.</p>
+      </div>
+      <div class="card">
+        <h3>Sensitivity first</h3>
+        <p>In screening, a missed case costs more than a false alarm. The study requires at least 92% CKD sensitivity, then looks for the best performance on the minority non-CKD class.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="dataset">
+    <h2>Dataset</h2>
+    <div class="grid cols-4" id="dataset-tiles"></div>
+    <div class="grid cols-2" style="margin-top:16px">
+      <div class="card">
+        <div class="chart-title">Class balance</div>
+        <div class="chart-sub">Share of all records by diagnosis</div>
+        <div id="class-balance"></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">Stratified split</div>
+        <div class="chart-sub">Records in each partition (random_state = 42)</div>
+        <div class="table-scroll"><table id="split-table"></table></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="chart-title">Explore a feature</div>
+      <div class="chart-sub" id="explore-sub"></div>
+      <div class="controls">
+        <label for="feature-select">Feature</label>
+        <select id="feature-select"></select>
+      </div>
+      <div id="feature-chart"></div>
+    </div>
+    <p class="small" style="margin-top:12px">Source: <a href="https://www.kaggle.com/datasets/rabieelkharoua/chronic-kidney-disease-dataset-analysis">Chronic Kidney Disease Dataset</a> by Rabie El Kharoua on Kaggle. <span id="dropped-note"></span></p>
+  </section>
+
+  <section class="wrap" id="method">
+    <h2>Method</h2>
+    <div class="card">
+      <ol class="steps">
+        <li><div><strong>Preprocessing.</strong> Identifier and provider columns are removed, values converted to numeric and missing values filled with the median.</div></li>
+        <li><div><strong>Feature selection.</strong> Fifteen weak features, identified by agreement between Random Forest, XGBoost and Logistic Regression importances and checked against KDIGO guidance, are dropped.</div></li>
+        <li><div><strong>Stratified split.</strong> 70% training, 20% validation and 10% testing, preserving the class ratio in each part.</div></li>
+        <li><div><strong>Imbalance handling.</strong> Balanced class weights make errors on the rare non-CKD class count more during training.</div></li>
+        <li><div><strong>Model training.</strong> CatBoost (depth 6, learning rate 0.03, L2 regularisation 6, early stopping on validation AUC) and four baselines are trained on the same data.</div></li>
+        <li><div><strong>Threshold optimisation.</strong> On the validation set, the decision threshold with the highest balanced accuracy is chosen among those keeping CKD sensitivity at 0.92 or above.</div></li>
+        <li><div><strong>Evaluation.</strong> Every model is scored once on the held-out test set with screening metrics, and the CatBoost model is interpreted with feature importance and SHAP values.</div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap" id="results">
+    <h2>Results on the test set</h2>
+    <div class="card">
+      <div class="chart-title">Model comparison</div>
+      <div class="chart-sub" id="compare-sub"></div>
+      <div class="controls">
+        <label for="metric-select">Metric</label>
+        <select id="metric-select"></select>
+      </div>
+      <div id="compare-chart"></div>
+      <div class="table-scroll" style="margin-top:16px"><table id="compare-table"></table></div>
+      <p class="small" id="compare-note" style="margin:10px 0 0"></p>
+    </div>
+
+    <h3 style="margin-top:28px">Engineered CatBoost in detail</h3>
+    <div class="grid cols-4" id="catboost-tiles"></div>
+    <div class="grid cols-2" style="margin-top:16px">
+      <div class="card">
+        <div class="chart-title">Confusion matrix</div>
+        <div class="chart-sub" id="cm-sub"></div>
+        <div class="cm" id="cm"></div>
+        <p class="small" id="cm-note" style="margin:12px 0 0"></p>
+      </div>
+      <div class="card">
+        <div class="chart-title">Choosing the threshold</div>
+        <div class="chart-sub">Validation-set metrics as the decision threshold moves</div>
+        <div id="sweep-chart"></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">ROC curve</div>
+        <div class="chart-sub" id="roc-sub"></div>
+        <div id="roc-chart"></div>
+      </div>
+      <div class="card">
+        <div class="chart-title">Precision–recall curve</div>
+        <div class="chart-sub" id="pr-sub"></div>
+        <div id="pr-chart"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap" id="predictors">
+    <h2>What the model relies on</h2>
+    <div class="card">
+      <div class="chart-title">Most important predictors</div>
+      <div class="chart-sub" id="imp-sub"></div>
+      <div class="controls">
+        <div class="seg" id="imp-toggle" role="group" aria-label="Importance measure">
+          <button type="button" data-key="native" aria-pressed="true">CatBoost importance</button>
+          <button type="button" data-key="shap" aria-pressed="false">SHAP</button>
+        </div>
+      </div>
+      <div id="imp-chart"></div>
+      <div id="imp-table"></div>
+    </div>
+    <p class="small" style="margin-top:12px">Importance describes how the model behaves. It is not evidence that a feature causes kidney disease.</p>
+  </section>
+
+  <section class="wrap" id="limitations">
+    <h2>Limitations</h2>
+    <div class="card">
+      <ul>
+        <li>The analysis uses a single dataset and has not been validated externally or prospectively.</li>
+        <li id="lim-test"></li>
+        <li>The optimised threshold needs to be evaluated on an independent dataset.</li>
+        <li>Feature importance does not establish causal relationships.</li>
+        <li>The model is a research prototype and is not intended for clinical diagnosis or deployment.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="wrap" id="team">
+    <h2>Team and code</h2>
+    <div class="card">
+      <p>The work was completed by a two-student research team under faculty supervision. Abu Adnan Shad led the model architecture, implementation and results analysis. A conference manuscript based on the thesis is being revised for submission.</p>
+      <div class="btn-row">
+        <a class="btn sm" href="https://github.com/adnanshad35/ckd-catboost-screening">Notebook and data on GitHub</a>
+        <a class="btn ghost sm" href="predict.html">Try the model</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Research prototype, not a diagnostic tool · <a href="https://github.com/adnanshad35/ckd-catboost-screening">Source code on GitHub</a></div>
+</footer>
+
+<script src="data/results.js"></script>
+<script src="assets/features.js"></script>
+<script src="assets/charts.js"></script>
+<script src="assets/research.js"></script>
+</body>
+</html>
