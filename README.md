@@ -8,9 +8,11 @@ JSON and evaluated in the visitor's browser.
 
 | Page | Purpose |
 |---|---|
-| `docs/index.html` | Plain-language information about CKD |
-| `docs/research.html` | Dataset, method, model comparison, curves, feature importance |
-| `docs/predict.html` | Form that runs the trained model on entered values |
+| `docs/index.html` | About: CKD information, the model (dataset and method) and the report (results, robustness check, limitations) |
+| `docs/predict.html` | Check CKD Model: form that runs the trained model and produces a downloadable report |
+
+`build/evaluate.py` produces the robustness check (repeated cross-validation of every
+model, written to `docs/data/robust.js`). It takes about an hour and resumes if interrupted.
 
 ## View it
 

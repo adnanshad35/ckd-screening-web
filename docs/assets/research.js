@@ -28,7 +28,7 @@
   tiles($("headline-tiles"), [
     ["CKD sensitivity", pct(cb.Sensitivity), `${cb.TPs} of ${cb.TPs + cb.FNs} CKD cases found`],
     ["Specificity", pct(cb.Specificity), `${cb.TNs} of ${nTestNon} non-CKD records cleared`],
-    ["Balanced accuracy", pct(cb.BalancedAcc), "Highest of the five models"],
+    ["Balanced accuracy", pct(cb.BalancedAcc), "Single test split"],
     ["ROC-AUC", f3(cb.ROC_AUC), `Test set, n = ${nTest}`],
   ]);
   tiles($("dataset-tiles"), [
@@ -159,6 +159,73 @@
         reruns.map((m) => `${MODEL_NAMES[m.Model]}: balanced accuracy ${f3(m.rerun.BalancedAcc)}, ${m.rerun.FPs} false positives, ${m.rerun.FNs} false negatives`).join("; ") +
         ". The other three models reproduce exactly.";
     }
+  })();
+
+  // ---- Robustness check (repeated cross-validation, build/evaluate.py) ----
+  (function () {
+    const X = window.CKD_ROBUST;
+    if (!X) { $("robustness").hidden = true; return; }
+    const D = X.design, P = X.physiology;
+    const ref = X.models[0];
+    const METRICS = [["BalancedAcc", "Balanced accuracy"], ["ROC_AUC", "ROC-AUC"], ["Sensitivity", "Sensitivity"], ["Specificity", "Specificity"]];
+    const pm = (m) => `${f3(m.mean)} ± ${f3(m.sd)}`;
+    const li = (host, text) => host.appendChild(el("li", "", text));
+
+    $("robust-intro").textContent =
+      `The comparison above rests on one test split holding only ${nTestNon} non-CKD records, where one or two patients change the ranking. ` +
+      `To check it, every model was refitted and re-tested ${D.folds} times (${D.splits}-fold cross-validation repeated ${D.repeats} times), ` +
+      `each time tuning its threshold on a validation part and scoring about ${D.testSize} unseen records, roughly ${D.nonCkdPerFold} of them non-CKD.`;
+
+    const select = $("robust-metric");
+    METRICS.forEach(([key, label]) => {
+      const o = el("option", "", label);
+      o.value = key;
+      select.appendChild(o);
+    });
+    const draw = () => {
+      const key = select.value;
+      $("robust-sub").textContent = `Mean ${METRICS.find((m) => m[0] === key)[1].toLowerCase()} over ${D.folds} test folds`;
+      hbars($("robust-chart"), X.models.slice().sort((a, b) => b[key].mean - a[key].mean).map((m) => ({
+        label: m.Model, value: m[key].mean, emph: m === ref,
+      })), { max: 1, fmt: f3 });
+    };
+    select.addEventListener("change", draw);
+    draw();
+
+    const t = $("robust-table");
+    const head = el("tr");
+    ["Model", "ROC-AUC", "Balanced acc.", "Sensitivity", "Specificity", "Difference (p)"].forEach((h) => head.appendChild(el("th", "", h)));
+    t.appendChild(head);
+    X.models.forEach((m) => {
+      const tr = el("tr", m === ref ? "highlight" : "");
+      const vs = m.vsThesis_BalancedAcc;
+      [m.Model, pm(m.ROC_AUC), pm(m.BalancedAcc), pm(m.Sensitivity), pm(m.Specificity),
+        vs ? `${Math.abs(vs.diff) < 0.0005 ? "" : vs.diff > 0 ? "+" : "−"}${Math.abs(vs.diff).toFixed(3)} (p = ${vs.p.toFixed(2)})` : "reference",
+      ].forEach((c) => tr.appendChild(el("td", "", c)));
+      t.appendChild(tr);
+    });
+
+    const by = (name) => X.models.find((m) => m.Model.startsWith(name));
+    const rf = by("Random Forest"), xgb = by("XGBoost (corrected"), xgbOld = by("XGBoost (thesis"),
+      lr = by("Logistic"), svm = by("SVM"), all = by("CatBoost (all"), plain = by("CatBoost (no class");
+    const findings = $("robust-findings");
+    li(findings, `CatBoost, Random Forest and XGBoost perform the same: balanced accuracy ${f3(ref.BalancedAcc.mean)}, ${f3(rf.BalancedAcc.mean)} and ${f3(xgb.BalancedAcc.mean)}, with no significant difference (p = ${rf.vsThesis_BalancedAcc.p.toFixed(2)} and ${xgb.vsThesis_BalancedAcc.p.toFixed(2)}). The data do not support ranking CatBoost above them.`);
+    li(findings, `Logistic Regression and SVM are weaker on balanced accuracy (${f3(lr.BalancedAcc.mean)} and ${f3(svm.BalancedAcc.mean)}; p = ${lr.vsThesis_BalancedAcc.p.toFixed(2)} and ${svm.vsThesis_BalancedAcc.p.toFixed(2)}), because they clear fewer non-CKD records.`);
+    li(findings, `XGBoost in the thesis was held back by its class weight (scale_pos_weight = 10), which favoured CKD, already the majority class. With the weight corrected its specificity rises from ${f3(xgbOld.Specificity.mean)} to ${f3(xgb.Specificity.mean)}.`);
+    li(findings, `Dropping the fifteen columns made no measurable difference: CatBoost on all columns scores ${f3(all.BalancedAcc.mean)} (p = ${all.vsThesis_BalancedAcc.p.toFixed(2)}). Neither did removing the class weights (${f3(plain.BalancedAcc.mean)}, p = ${plain.vsThesis_BalancedAcc.p.toFixed(2)}).`);
+    li(findings, `Expected performance of the CatBoost pipeline on new records from this dataset: sensitivity ${f3(ref.Sensitivity.mean)}, specificity ${f3(ref.Specificity.mean)}, ROC-AUC ${f3(ref.ROC_AUC.mean)}.`);
+
+    const rule = X.rules[0];
+    const data = $("robust-data");
+    li(data, `The measurements are unrelated to one another. Serum creatinine and GFR, which move in opposite directions in any real patient, have a rank correlation of ${P.creatinine_gfr.toFixed(3)}; systolic and diastolic blood pressure, ${P.systolic_diastolic.toFixed(3)}; LDL and total cholesterol, ${P.ldl_total_cholesterol.toFixed(3)}.`);
+    li(data, `${P.impossible} records combine a serum creatinine above 3 mg/dL with a GFR above 90, which does not occur clinically.`);
+    li(data, `The diagnosis label barely follows kidney function: ${pct(P.ckdShareGfrOver90)} of records with a normal GFR (90 or more) are labelled CKD, against ${pct(P.ckdShareGfrUnder60)} of those below 60.`);
+    li(data, `The standard clinical rule (GFR below 60 or ACR of 30 or more) reaches a balanced accuracy of only ${f3(rule.BalancedAcc)} here, close to guessing.`);
+    li(data, "Together these indicate the values were generated independently rather than measured from patients. The results describe this dataset and should not be read as performance on real people.");
+
+    const cal = X.calibration[ref.Model];
+    $("lim-data").textContent = `The dataset does not behave like patient data: its measurements are statistically independent of each other (creatinine and GFR correlate at ${P.creatinine_gfr.toFixed(3)}), so findings may not transfer to real patients.`;
+    $("lim-rank").textContent = `Under repeated cross-validation CatBoost is not distinguishable from Random Forest or a correctly weighted XGBoost. Its score is also not a calibrated probability: it averages ${pct(cal.meanPredicted, 0)} where ${pct(R.dataset.ckd / R.dataset.records, 0)} of records are CKD.`;
   })();
 
   // ---- CatBoost detail ----

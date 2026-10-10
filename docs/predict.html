@@ -3,30 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CKD Screening — Try the model</title>
+  <title>CKD Screening — Check CKD Model</title>
   <meta name="description" content="Enter patient values and see what the thesis CatBoost model predicts. Research demonstration only.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
 <header class="site-header">
   <div class="wrap">
-    <a class="brand" href="index.html">CKD Screening</a>
+    <a class="brand" href="index.html"><span class="logo">CK</span>CKD Screening</a>
     <nav aria-label="Main">
-      <a href="index.html">About CKD</a>
-      <a href="research.html">Research</a>
-      <a href="predict.html" aria-current="page">Try the model</a>
+      <a href="index.html">About</a>
+      <a class="cta" href="predict.html" aria-current="page">Check CKD Model</a>
     </nav>
   </div>
 </header>
 
-<main class="wrap">
-  <div class="hero" style="padding-bottom:16px">
-    <h1>Try the screening model</h1>
-    <p class="lead">Fill in your basic information and lab data, press Submit, and the thesis CatBoost model produces a report you can download. The model runs in your browser; nothing you type is sent anywhere.</p>
-    <p class="notice"><strong>Research demonstration, not a diagnosis.</strong> <span id="caveat"></span> Do not use the result to make health decisions. See a doctor for kidney testing.</p>
+<main>
+  <div class="hero compact">
+    <div class="wrap">
+      <span class="eyebrow">Interactive model</span>
+      <h1>Check CKD Model</h1>
+      <p class="lead">Fill in your basic information and lab data, press Submit, and the thesis CatBoost model produces a report you can download. The model runs in your browser; nothing you type is sent anywhere.</p>
+      <p class="notice" style="max-width:820px"><strong>Research demonstration, not a diagnosis.</strong> <span id="caveat"></span> Do not use the result to make health decisions. See a doctor for kidney testing.</p>
+    </div>
   </div>
 
-  <div class="controls no-print">
+  <div class="wrap">
+  <div class="controls toolbar no-print">
     <label for="example-select">Or load an example:</label>
     <select id="example-select"><option value="">Choose an example…</option></select>
     <button type="button" class="btn ghost sm" id="clear">Clear</button>
@@ -34,7 +40,7 @@
 
   <form id="form" class="predict-form no-print" novalidate>
     <div class="submit-row" id="submit-row">
-      <button type="submit" class="btn">Submit and see report</button>
+      <button type="submit" class="btn lg">Submit and see report</button>
       <span class="small" id="status" aria-live="polite"></span>
     </div>
   </form>
@@ -47,10 +53,11 @@
       <button type="button" class="btn ghost" id="edit">Edit answers</button>
     </div>
   </section>
+  </div>
 </main>
 
 <footer>
-  <div class="wrap">Research prototype, not a diagnostic tool · <a href="research.html">How the model was built and tested</a></div>
+  <div class="wrap">Research prototype, not a diagnostic tool · <a href="index.html#model">How the model was built and tested</a></div>
 </footer>
 
 <script src="data/results.js"></script>

@@ -21,6 +21,7 @@
   const inputs = {}, errors = {};
   const touched = new Set();
 
+  const ckdShare = Math.round((R.dataset.ckd / R.dataset.records) * 100);
   const caveat =
     `The model was trained on one dataset in which ${Math.round((R.dataset.ckd / R.dataset.records) * 100)}% of records are CKD cases, ` +
     `so it flags most profiles. In testing it wrongly flagged ${cb.FPs} of ${nNon} people without CKD and missed ${cb.FNs} of ${cb.TPs + cb.FNs} with it.`;
@@ -208,7 +209,7 @@
       el("p", "small", `Generated ${new Date().toLocaleString()} · Research demonstration, not a diagnosis`));
 
     const result = el("div", "report-result");
-    result.append(el("div", "small", "Model's estimated probability of CKD"),
+    result.append(el("div", "small", "Model score"),
       el("div", "prob", (probability * 100).toFixed(1) + "%"));
     const meter = el("div", "meter");
     const fill = el("div", "fill");
@@ -217,11 +218,12 @@
     mark.style.left = M.threshold * 100 + "%";
     mark.appendChild(el("span", "", `Threshold ${(M.threshold * 100).toFixed(1)}%`));
     meter.append(fill, mark);
+    const scoreNote = el("p", "small", "The score is the model's output on a 0 to 100% scale. It is not your personal chance of having CKD: the model was trained on data that is " + ckdShare + "% CKD cases and its scores are not calibrated.");
     const verdict = el("div", "verdict " + (positive ? "pos" : "neg"));
     verdict.append(el("span", "icon", positive ? "!" : "✓"), el("span", "", positive ? "Flagged as likely CKD" : "Not flagged"));
-    result.append(meter, verdict, el("p", "small", positive
-      ? `The estimate is at or above the model's threshold. In testing, ${cb.TPs} of the ${cb.TPs + cb.FPs} profiles it flagged did have CKD.`
-      : `The estimate is below the model's threshold. In testing, ${cb.TNs} of the ${cb.TNs + cb.FNs} profiles it did not flag were free of CKD.`));
+    result.append(meter, verdict, scoreNote, el("p", "small", positive
+      ? `The score is at or above the model's threshold. In testing, ${cb.TPs} of the ${cb.TPs + cb.FPs} profiles it flagged did have CKD.`
+      : `The score is below the model's threshold. In testing, ${cb.TNs} of the ${cb.TNs + cb.FNs} profiles it did not flag were free of CKD.`));
     body.appendChild(result);
 
     const contrib = window.ckdContributions(M, row, medians)
@@ -229,8 +231,8 @@
       .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
       .slice(0, 6);
     if (contrib.length) {
-      body.append(el("h3", "", "What moved this estimate"),
-        el("p", "small", "Change in probability compared with the dataset's typical value for that field. Red raises the estimate, blue lowers it."));
+      body.append(el("h3", "", "What moved this score"),
+        el("p", "small", "Change in score compared with the dataset's typical value for that field. Red raises the score, blue lowers it."));
       const grid = el("div", "contrib");
       const scale = Math.max(...contrib.map((c) => Math.abs(c.delta)));
       contrib.forEach((c) => {

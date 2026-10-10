@@ -37,7 +37,7 @@ from build import CSV, DROP_COLS, MIN_RECALL, OUT, TARGET_COL, pr_auc, threshold
 
 warnings.filterwarnings("ignore")
 
-N_SPLITS, N_REPEATS, SEED = 5, 6, 42
+N_SPLITS, N_REPEATS, SEED = 5, 10, 42
 VALID_SHARE = 0.22  # of the training part, as in the thesis (20% of 90%)
 METRICS = ["ROC_AUC", "PR_AUC", "BalancedAcc", "Sensitivity", "Specificity"]
 CACHE = Path(__file__).resolve().parent / "eval_cache.json"
