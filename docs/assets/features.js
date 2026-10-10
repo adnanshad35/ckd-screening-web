@@ -8,6 +8,27 @@ window.CKD_FEATURES = {
   labs: ["SerumCreatinine", "BUNLevels", "GFR", "ProteinInUrine", "ACR", "FastingBloodSugar", "HbA1c",
     "SerumElectrolytesSodium", "SerumElectrolytesPotassium", "SerumElectrolytesCalcium", "SerumElectrolytesPhosphorus",
     "HemoglobinLevels", "CholesterolTotal", "CholesterolLDL", "CholesterolHDL", "CholesterolTriglycerides"],
+  // Typical adult reference ranges shown on the report (individual laboratories differ).
+  // { lo, hi } is an inclusive range, { below } means normal is under the value,
+  // { atLeast } means normal is the value or more.
+  ref: {
+    SerumCreatinine: { lo: 0.6, hi: 1.3 },
+    BUNLevels: { lo: 7, hi: 20 },
+    GFR: { atLeast: 60 },
+    ProteinInUrine: { below: 0.15 },
+    ACR: { below: 30 },
+    FastingBloodSugar: { lo: 70, hi: 99 },
+    HbA1c: { below: 5.7 },
+    SerumElectrolytesSodium: { lo: 135, hi: 145 },
+    SerumElectrolytesPotassium: { lo: 3.5, hi: 5.0 },
+    SerumElectrolytesCalcium: { lo: 8.5, hi: 10.5 },
+    SerumElectrolytesPhosphorus: { lo: 2.5, hi: 4.5 },
+    HemoglobinLevels: { male: { lo: 13.5, hi: 17.5 }, female: { lo: 12.0, hi: 15.5 } },
+    CholesterolTotal: { below: 200 },
+    CholesterolLDL: { below: 100 },
+    CholesterolHDL: { atLeast: 40 },
+    CholesterolTriglycerides: { below: 150 },
+  },
   groups: [
     { title: "About the person", fields: ["Age", "Gender", "SocioeconomicStatus", "EducationLevel", "BMI", "FamilyHistoryKidneyDisease"] },
     { title: "Lifestyle", fields: ["Smoking", "AlcoholConsumption", "PhysicalActivity", "DietQuality", "SleepQuality"] },

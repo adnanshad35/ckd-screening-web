@@ -24,10 +24,15 @@
 <main>
   <div class="hero compact">
     <div class="wrap">
-      <span class="eyebrow">Interactive model</span>
-      <h1>Check CKD Model</h1>
-      <p class="lead">Fill in your basic information and lab data, press Submit, and the thesis CatBoost model produces a report you can download. The model runs in your browser; nothing you type is sent anywhere.</p>
-      <p class="notice" style="max-width:820px"><strong>Research demonstration, not a diagnosis.</strong> <span id="caveat"></span> Do not use the result to make health decisions. See a doctor for kidney testing.</p>
+      <div class="hero-grid tight">
+        <div>
+          <span class="eyebrow">Interactive model</span>
+          <h1>Check CKD Model</h1>
+          <p class="lead">Fill in your basic information and lab data, press Submit, and the thesis CatBoost model produces a report you can download. The model runs in your browser; nothing you type is sent anywhere.</p>
+        </div>
+        <img class="hero-art photo" src="assets/img/blood-pressure.jpg" alt="A clinician measuring a patient's blood pressure, seen from above" width="1200" height="709">
+      </div>
+      <p class="notice"><strong>Research demonstration, not a diagnosis.</strong> <span id="caveat"></span> Do not use the result to make health decisions. See a doctor for kidney testing.</p>
     </div>
   </div>
 
@@ -57,7 +62,7 @@
 </main>
 
 <footer>
-  <div class="wrap">Research prototype, not a diagnostic tool · <a href="index.html#model">How the model was built and tested</a></div>
+  <div class="wrap">Research prototype, not a diagnostic tool · <a href="index.html#model">How the model was built and tested</a> · <a href="index.html#report">Image credits</a></div>
 </footer>
 
 <script src="data/results.js"></script>

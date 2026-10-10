@@ -24,12 +24,17 @@
 <main>
   <div class="hero">
     <div class="wrap">
-      <span class="eyebrow">Undergraduate thesis project</span>
-      <h1>Screening for chronic kidney disease with machine learning</h1>
-      <p class="lead">Chronic kidney disease usually develops silently over years. This site explains the disease, presents a CatBoost model built to screen for it, and reports how well that model performed.</p>
-      <div class="btn-row">
-        <a class="btn lg" href="predict.html">Check CKD Model</a>
-        <a class="btn ghost lg" href="#about">Learn about CKD</a>
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow">Undergraduate thesis project</span>
+          <h1>Screening for chronic kidney disease with machine learning</h1>
+          <p class="lead">Chronic kidney disease usually develops silently over years. This site explains the disease, presents a CatBoost model built to screen for it, and reports how well that model performed.</p>
+          <div class="btn-row">
+            <a class="btn lg" href="predict.html">Check CKD Model</a>
+            <a class="btn ghost lg" href="#about">Learn about CKD</a>
+          </div>
+        </div>
+        <img class="hero-art photo" src="assets/img/kidney-anatomy.jpg" alt="Medical rendering of a kidney in cross-section, showing the cortex, renal artery, renal vein and ureter" width="1200" height="829">
       </div>
       <div class="grid cols-4" id="headline-tiles"></div>
     </div>
@@ -100,12 +105,21 @@
     <section>
       <h3>How CKD is found</h3>
       <div class="grid cols-2">
-        <div class="card">
-          <h3>Two simple tests</h3>
-          <ul>
-            <li><strong>Blood test (eGFR).</strong> Serum creatinine is measured and used to estimate the glomerular filtration rate: how much blood the kidneys filter each minute.</li>
-            <li><strong>Urine test (ACR).</strong> The albumin-to-creatinine ratio shows whether protein is leaking into the urine, an early sign of damage.</li>
-          </ul>
+        <div class="grid">
+          <div class="card media">
+            <img src="assets/img/blood-test.jpg" alt="Blood sample tubes in a medical laboratory" width="900" height="800" loading="lazy">
+            <div>
+              <h3>Blood test (eGFR)</h3>
+              <p>Serum creatinine is measured and used to estimate the glomerular filtration rate: how much blood the kidneys filter each minute.</p>
+            </div>
+          </div>
+          <div class="card media">
+            <img src="assets/img/urine-test.jpg" alt="A urine sample in a collection container" width="900" height="675" loading="lazy">
+            <div>
+              <h3>Urine test (ACR)</h3>
+              <p>The albumin-to-creatinine ratio shows whether protein is leaking into the urine, an early sign of damage.</p>
+            </div>
+          </div>
         </div>
         <div class="card">
           <h3>Stages by filtration rate</h3>
@@ -325,6 +339,16 @@
           <a class="btn ghost sm" href="https://github.com/adnanshad35/ckd-catboost-screening">Notebook and data on GitHub</a>
         </div>
       </div>
+    </section>
+
+    <section>
+      <h3>Image credits</h3>
+      <p class="small">Photos are from Wikimedia Commons.
+        Kidney anatomy: <a href="https://commons.wikimedia.org/wiki/File:3D_Medical_Animation_depicting_Kidney_Layers_2.jpg">3D Medical Animation depicting Kidney Layers</a> by scientificanimations.com, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.
+        Urine sample: <a href="https://commons.wikimedia.org/wiki/File:Urine_sample_for_Culture_and_Sensitivity.jpg">Urine sample for Culture and Sensitivity</a> by Ajay Kumar Chaurasiya, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>.
+        Blood sample tubes: <a href="https://commons.wikimedia.org/wiki/File:Laboratory_Test_Tubes;_from_a_medical_laboratory_in_Abuja,_Nigeria.jpg">Laboratory Test Tubes</a> by Frankincense Diala, CC0.
+        Blood pressure check: <a href="https://commons.wikimedia.org/wiki/File:Blood_pressure_monitoring.jpg">Blood pressure monitoring</a> by rawpixel.com, CC0.
+        Images are resized; no other changes were made.</p>
     </section>
 
     <p class="notice"><strong>This site is for education and research.</strong> It does not give medical advice and cannot diagnose kidney disease. If you are worried about your kidneys, speak to a doctor.</p>
