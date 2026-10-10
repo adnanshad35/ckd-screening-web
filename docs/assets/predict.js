@@ -18,7 +18,7 @@
   const labs = R.importance.map((it) => it.feature).filter((f) => F.labs.includes(f)).slice(0, LAB_COUNT);
   const required = F.basic.concat(labs);
   const optional = M.features.filter((f) => !required.includes(f));
-  const inputs = {}, errors = {};
+  const inputs = {}, errors = {}, hints = {};
   const touched = new Set();
 
   const ckdShare = Math.round((R.dataset.ckd / R.dataset.records) * 100);
@@ -63,7 +63,9 @@
     input.addEventListener("blur", () => { touched.add(name); refresh(); });
     inputs[name] = input;
     field.append(label, input);
-    if (hint) field.appendChild(el("div", "hint", hint));
+    // Every field carries one line under its control so that rows stay level.
+    hints[name] = el("div", "hint", hint || "Choose one");
+    field.appendChild(hints[name]);
     if (isRequired) {
       errors[name] = el("div", "error");
       errors[name].hidden = true;
@@ -154,6 +156,7 @@
         if (message) problems.push(name);
         const show = message && touched.has(name);
         errors[name].hidden = !show;
+        hints[name].hidden = Boolean(show);
         errors[name].textContent = message;
         input.setAttribute("aria-invalid", String(Boolean(show)));
         return v;
