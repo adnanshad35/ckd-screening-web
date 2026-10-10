@@ -3,8 +3,8 @@
 Reproduces ckd_catboost_screening.ipynb (same columns, split, models and
 threshold rule) and writes two files the website loads:
 
-    docs/data/results.js   dataset statistics, model metrics, curves, importances
-    docs/data/model.js     the trained CatBoost trees, evaluated in the browser
+    lib/data/results.json   dataset statistics, model metrics, curves, importances
+    lib/data/model.json     the trained CatBoost trees, evaluated in the browser
 
 Run from the project folder:
     .venv\\Scripts\\python.exe build\\build.py
@@ -31,7 +31,7 @@ warnings.filterwarnings("ignore")
 
 ROOT = Path(__file__).resolve().parent.parent
 CSV = ROOT / "data" / "Chronic_Kidney_Dsease_data.csv"
-OUT = ROOT / "docs" / "data"
+OUT = ROOT / "lib" / "data"
 
 TARGET_COL = "Diagnosis"
 DROP_COLS = [
@@ -106,8 +106,8 @@ def r(values, digits=4):
     return [round(float(v), digits) for v in values]
 
 
-def write_js(path, name, payload):
-    path.write_text(f"window.{name} = {json.dumps(payload, separators=(',', ':'))};\n", encoding="utf-8")
+def write_json(path, payload):
+    path.write_text(json.dumps(payload, separators=(',', ':')) + "\n", encoding="utf-8")
     print(f"wrote {path.relative_to(ROOT)} ({path.stat().st_size / 1024:.0f} KB)")
 
 
@@ -238,7 +238,7 @@ def main():
                  "values": {f: round(float(row[f]), 3) for f in features}} for k, row in picks.items()]
 
     OUT.mkdir(parents=True, exist_ok=True)
-    write_js(OUT / "results.js", "CKD_RESULTS", {
+    write_json(OUT / "results.json", {
         "dataset": {
             "records": int(len(df)), "rawColumns": int(n_raw_cols), "features": len(features),
             "dropped": DROP_COLS, "ckd": int((y == 1).sum()), "nonCkd": int((y == 0).sum()),
@@ -271,13 +271,13 @@ def main():
     trees = [{"f": [s["float_feature_index"] for s in t["splits"]],
               "b": [s["border"] for s in t["splits"]],
               "v": t["leaf_values"]} for t in exported["oblivious_trees"]]
-    write_js(OUT / "model.js", "CKD_MODEL", {
+    write_json(OUT / "model.json", {
         "features": features, "trees": trees, "scale": scale,
         "bias": bias[0] if isinstance(bias, list) else bias,
         "threshold": round(threshold, 3),
     })
 
-    # Rows used by build/check_parity.js to confirm the browser maths matches CatBoost.
+    # Rows used by build/check_parity.mjs to confirm the browser maths matches CatBoost.
     parity = {"rows": X_test.values.tolist(), "proba": proba_test.tolist()}
     (ROOT / "build" / "parity.json").write_text(json.dumps(parity), encoding="utf-8")
 

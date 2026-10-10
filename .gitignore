@@ -3,3 +3,6 @@ __pycache__/
 build/parity.json
 catboost_info/
 build/eval_cache.json
+node_modules/
+.next/
+next-env.d.ts

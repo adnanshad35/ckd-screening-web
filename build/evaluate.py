@@ -12,7 +12,7 @@ cross-validation so that every record is tested several times, and adds:
   * calibration of the CatBoost probabilities
   * checks of whether the dataset follows basic kidney physiology
 
-Writes docs/data/robust.js. Run:  .venv\\Scripts\\python.exe build\\evaluate.py
+Writes lib/data/robust.json. Run:  .venv\\Scripts\\python.exe build\\evaluate.py
 """
 import json
 import math
@@ -33,7 +33,7 @@ from sklearn.svm import SVC
 from xgboost import XGBClassifier
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from build import CSV, DROP_COLS, MIN_RECALL, OUT, TARGET_COL, pr_auc, threshold_tuning, write_js  # noqa: E402
+from build import CSV, DROP_COLS, MIN_RECALL, OUT, TARGET_COL, pr_auc, threshold_tuning, write_json  # noqa: E402
 
 warnings.filterwarnings("ignore")
 
@@ -200,7 +200,7 @@ def main():
     print("physiology", json.dumps(physiology))
     print("calibration", json.dumps(calibration))
 
-    write_js(OUT / "robust.js", "CKD_ROBUST", {
+    write_json(OUT / "robust.json", {
         "design": {"splits": N_SPLITS, "repeats": N_REPEATS, "folds": len(folds), "testSize": n_test,
                    "nonCkdPerFold": int((y == 0).sum() / N_SPLITS), "minRecall": MIN_RECALL},
         "models": models, "rules": rules, "physiology": physiology, "calibration": calibration,

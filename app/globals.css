@@ -58,7 +58,7 @@ body {
   margin: 0;
   background: var(--page);
   color: var(--text);
-  font: 16px/1.65 "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font: 16px/1.65 var(--font-inter), system-ui, -apple-system, "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 a { color: var(--accent-ink); }
